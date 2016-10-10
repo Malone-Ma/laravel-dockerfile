@@ -26,7 +26,7 @@ RUN add-apt-repository ppa:ondrej/php \
 
 # run install mysql-server
 RUN debconf-set-selections <<< 'mysql-server mysql-server/root_password password root' \
-	&& debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
+	&& debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root' \
 	&& apt-get install -y mysql-server
 
 # run install php
@@ -35,19 +35,19 @@ RUN apt-get install -y php5.6-fpm php5.6-curl php5.6-gd php5.6-geoip php5.6-imag
     php5.6-mbstring php5.6-xml php5.6-pdo php5.6-pdo-mysql 
 
 # Configure PHP-FPM
-#RUN sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php5.6/fpm/php.ini && \
-#    sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php5.6/fpm/php.ini && \
-#    sed -i "s/display_errors = Off/display_errors = stderr/" /etc/php5.6/fpm/php.ini && \
-#    sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 30M/" /etc/php5.6/fpm/php.ini
+RUN sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/5.6/fpm/php.ini \
+    && sed -i "s/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/" /etc/php/5.6/fpm/php.ini \
+    && sed -i "s/display_errors = Off/display_errors = stderr/" /etc/php/5.6/fpm/php.ini \
+    && sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 30M/" /etc/php/5.6/fpm/php.ini
 
 # run install composer
-
+RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
 
 # Apply Nginx configuration
-#ADD config/nginx.conf /etc/nginx/nginx.conf
-#ADD config/laravel /etc/nginx/sites-available/laravel
-#RUN ln -s /etc/nginx/sites-available/laravel /etc/nginx/sites-enabled/laravel && \
-#    rm /etc/nginx/sites-enabled/default
+ADD config/nginx.conf /etc/nginx/nginx.conf
+ADD config/laravel.conf /etc/nginx/sites-available/laravel.conf
+RUN ln -s /etc/nginx/sites-available/laravel.conf /etc/nginx/sites-enabled/laravel.conf \
+    && rm /etc/nginx/sites-enabled/default
 
 # Set user jenkins to the image
 RUN useradd -m -d /home/jenkins -s /bin/sh jenkins &&\
