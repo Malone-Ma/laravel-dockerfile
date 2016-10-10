@@ -55,12 +55,9 @@ VOLUME /home/jenkins/.composer/cache
 
 # Standard SSH port
 EXPOSE 22
+# Standard HTTP port
+EXPOSE 80
 
+ADD config/init-start.sh /start.sh
 # Default command
-ENTRYPOINT service ssh restart \
-    && service php5.6-fpm restart \
-    && service mysql restart \
-    && bash
-#CMD ["/usr/sbin/sshd", "-D"]
-#ENTRYPOINT ["/usr/sbin/php-fpm", "-F"]
-#ENTRYPOINT ["/usr/sbin/nginx", "-F"]
+ENTRYPOINT ["/start.sh"]
