@@ -18,14 +18,12 @@ ENV LC_ALL en_US.UTF-8
 
 # run install git, curl, nginx, imagemagick 
 RUN add-apt-repository ppa:ondrej/php \
-    && apt-get update && apt-get install -y git curl unzip nginx imagemagick \
+    && apt-get update && apt-get install -y vim git curl unzip nginx imagemagick \
 	&& mkdir -p /var/www
 
 # run install mysql-server
-RUN #!/bin/sh \
-    && debconf-set-selections <<< 'mysql-server mysql-server/root_password password root' \
-	&& debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root' \
-	&& apt-get install -y mysql-server
+ENV DEBIAN_FRONTEND noninteractive
+RUN apt-get install -y mysql-server
 
 # run install php
 RUN apt-get install -y php5.6-fpm php5.6-curl php5.6-gd php5.6-geoip php5.6-imagick \
@@ -48,8 +46,9 @@ RUN ln -s /etc/nginx/sites-available/laravel.conf /etc/nginx/sites-enabled/larav
     && rm /etc/nginx/sites-enabled/default
 
 # Set user jenkins to the image
-RUN useradd -m -d /home/jenkins -s /bin/sh jenkins &&\
-    echo "jenkins:jenkins" | chpasswd
+RUN useradd -m -d /home/jenkins -s /bin/sh jenkins \
+    && echo "jenkins:jenkins" | chpasswd \
+    && chown jenkins:jenkins /home/jenkins -R
 
 # Volume for composer
 VOLUME /home/jenkins/.composer/cache
