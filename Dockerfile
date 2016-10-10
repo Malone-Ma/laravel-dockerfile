@@ -58,8 +58,7 @@ EXPOSE 22
 # Standard HTTP port
 EXPOSE 80
 
-#ADD config/init-start.sh /init-start.sh
-#RUN chmod +x /init-start.sh
+ADD config/init-start.sh /init-start.sh
+RUN chmod +x /init-start.sh
 # Default command
-#ENTRYPOINT ["/init-start.sh"]
-ENTRYPOINT service ssh start && service mysql start && service php5.6-fpm start && service nginx start && bash
+ENTRYPOINT ["/init-start.sh"]
