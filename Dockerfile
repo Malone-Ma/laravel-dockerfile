@@ -25,7 +25,8 @@ RUN add-apt-repository ppa:ondrej/php \
 	&& mkdir -p /var/www
 
 # run install mysql-server
-RUN debconf-set-selections <<< 'mysql-server mysql-server/root_password password root' \
+RUN #!/bin/sh \
+    && debconf-set-selections <<< 'mysql-server mysql-server/root_password password root' \
 	&& debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root' \
 	&& apt-get install -y mysql-server
 
@@ -41,7 +42,7 @@ RUN sed -i "s/;date.timezone =.*/date.timezone = UTC/" /etc/php/5.6/fpm/php.ini 
     && sed -i "s/upload_max_filesize = 2M/upload_max_filesize = 30M/" /etc/php/5.6/fpm/php.ini
 
 # run install composer
-RUN curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # Apply Nginx configuration
 ADD config/nginx.conf /etc/nginx/nginx.conf
