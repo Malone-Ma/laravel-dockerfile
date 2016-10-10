@@ -58,6 +58,7 @@ EXPOSE 22
 # Standard HTTP port
 EXPOSE 80
 
-ADD config/init-start.sh /start.sh
+ADD config/init-start.sh /init-start.sh
+RUN chmod +x /init-start.sh
 # Default command
-ENTRYPOINT ["/start.sh"]
+ENTRYPOINT ["/init-start.sh"]
