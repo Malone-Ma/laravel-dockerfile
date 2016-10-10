@@ -57,6 +57,10 @@ VOLUME /home/jenkins/.composer/cache
 EXPOSE 22
 
 # Default command
+ENTRYPOINT service ssh restart \
+    && service php5.6-fpm restart \
+    && service mysql restart \
+    && bash
 #CMD ["/usr/sbin/sshd", "-D"]
 #ENTRYPOINT ["/usr/sbin/php-fpm", "-F"]
 #ENTRYPOINT ["/usr/sbin/nginx", "-F"]
