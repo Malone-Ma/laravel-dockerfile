@@ -16,9 +16,6 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-# Volume for composer
-VOLUME /home/jenkins/.composer/cache
-
 # run install git, curl, nginx, imagemagick 
 RUN add-apt-repository ppa:ondrej/php \
     && apt-get update && apt-get install -y git curl unzip nginx imagemagick \
@@ -53,6 +50,9 @@ RUN ln -s /etc/nginx/sites-available/laravel.conf /etc/nginx/sites-enabled/larav
 # Set user jenkins to the image
 RUN useradd -m -d /home/jenkins -s /bin/sh jenkins &&\
     echo "jenkins:jenkins" | chpasswd
+
+# Volume for composer
+VOLUME /home/jenkins/.composer/cache
 
 # Standard SSH port
 EXPOSE 22
