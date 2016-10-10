@@ -16,6 +16,8 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
+# Volume for composer
+VOLUME /home/jenkins/.composer/cache
 
 # run install git, curl, nginx, imagemagick 
 RUN add-apt-repository ppa:ondrej/php \
