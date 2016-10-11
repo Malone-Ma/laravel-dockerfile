@@ -18,6 +18,7 @@ ENV LC_ALL en_US.UTF-8
 RUN groupadd -g 117 jenkins \
     && useradd -g 117 -u 112 -d /home/jenkins -s /bin/sh jenkins \
     && echo "jenkins:jenkins" | chpasswd \
+    && mkdir /home/jenkins \
     && chown jenkins:jenkins /home/jenkins -R
 
 # run install git, curl 
